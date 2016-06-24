@@ -9,6 +9,7 @@ import (
   "log"
   "net/http"
   "os"
+  "strings"
 
   "github.com/gin-gonic/gin"
 )
@@ -60,6 +61,7 @@ func main() {
   port := os.Getenv("PORT")
   token := os.Getenv("TOKEN")
   webhook_url := os.Getenv("WEBHOOK_URL")
+  separator := "->"
 
   if port == "" {
     log.Fatal("$PORT must be set")
@@ -67,15 +69,31 @@ func main() {
 
   router := gin.Default()
   router.POST("/props", func(c *gin.Context) {
-    user_id := c.PostForm("user_id")
-    user_name := c.PostForm("user_name")
+    text := c.PostForm("text")
+    fmt.Println(text)
 
     fmt.Printf("%+v\n", convertNameToID("wojzag", token))
 
+    paramsArray := strings.Split(text, separator)
+    mentions := paramsArray[0]
+    props := paramsArray[1]
+
+    if mentions == "" || props == "" {
+      c.JSON(400, gin.H{"message": "Nope"})
+      return
+    }
+
+    mentionsArray := strings.Split(mentions, ",")
+    for _, mention := range mentionsArray {
+      mention := strings.TrimSpace(mention)
+      if mention[0] == '@' {
+        mention = strings.TrimLeft(mention, "@")
+      }
+      fmt.Println(mention)
+    }
+
     c.JSON(200, gin.H{
-      "status":  "posted",
-      "user_id": user_id,
-      "nick":    user_name,
+      "status": "posted",
     })
     sendPropsInfo("test", webhook_url)
   })
