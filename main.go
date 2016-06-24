@@ -2,21 +2,30 @@
 package main
 
 import (
-  "log"
-  "os"
+	"log"
+	"os"
 
-  "github.com/kataras/iris"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-  port := os.Getenv("PORT")
+	port := os.Getenv("PORT")
 
-  if port == "" {
-    log.Fatal("$PORT must be set")
-  }
+	if port == "" {
+		log.Fatal("$PORT must be set")
+	}
 
-  iris.Get("/", func(c *iris.Context) {
-    c.HTML("Hello, this is Propslack")
-  })
-  iris.Listen(port)
+	router := gin.Default()
+
+	router.POST("/props", func(c *gin.Context) {
+		user_id := c.PostForm("user_id")
+		user_name := c.PostForm("user_name")
+
+		c.JSON(200, gin.H{
+			"status":  "posted",
+			"user_id": user_id,
+			"nick":    user_name,
+		})
+	})
+	router.Run(":" + port)
 }
