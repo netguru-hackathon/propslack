@@ -77,7 +77,7 @@ func main() {
       "user_id": user_id,
       "nick":    user_name,
     })
+    sendPropsInfo("test", webhook_url)
   })
-  sendPropsInfo("test", webhook_url)
   router.Run(":" + port)
 }
