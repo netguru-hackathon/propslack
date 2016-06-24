@@ -21,7 +21,7 @@ type Member struct {
 	Name    string      `json:"name"`
 }
 type User struct {
-	Member []Member `json:"member"`
+	Member []Member `json:"members"`
 }
 
 func main() {
@@ -37,7 +37,7 @@ func main() {
 		user_id := c.PostForm("user_id")
 		user_name := c.PostForm("user_name")
 
-		resp, err := http.Get("https://slack.com/api/users.info?user=" + user_id + "&token=" + token)
+		resp, err := http.Get("https://slack.com/api/users.list?user=" + user_id + "&token=" + token)
 		if err != nil {
 			fmt.Println(err.Error())
 		}
@@ -48,7 +48,7 @@ func main() {
 		if err := json.Unmarshal(body, &dat); err != nil {
 			panic(err)
 		}
-		fmt.Println(dat.Member[0].Profile.Email)
+		fmt.Println(dat)
 		if err != nil {
 			fmt.Println(err.Error())
 		}
