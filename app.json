@@ -1,0 +1,12 @@
+{
+  "name": "propslack",
+  "description": "",
+  "keywords": [
+    "props",
+    "slack"
+  ],
+  "image": "heroku/go:1.6",
+  "mount_dir": "src/github.com/netguru-hackathon/propslack",
+  "website": "http://github.com/netguru-hackathon/propslack",
+  "repository": "http://github.com/netguru-hackathon/propslack"
+}
